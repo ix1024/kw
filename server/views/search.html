@@ -1,0 +1,22 @@
+{% extends "layout/layout.html"%} {% block content %}
+
+{{keyword}}
+<div class="row my-4">
+    {% include "common/_item.html"%}
+</div>
+
+<ul class="pagination justify-content-center mb-4">
+    <li class="page-item">
+        <!-- <a class="page-link" href="#">← Older</a> -->
+        <a class="page-link" href="#">加载更多</a>
+    </li>
+    <li class="page-item disabled">
+        <a class="page-link" href="#">Newer →</a>
+    </li>
+</ul>
+<!-- /.row -->
+
+
+
+
+{% endblock %} {%block js%} {%endblock %}

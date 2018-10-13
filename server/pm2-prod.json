@@ -1,0 +1,20 @@
+{
+    "apps": [{
+        "name": "kw",
+        "cwd": "/data/github/kw/server",
+        "script": "bin/www",
+        "exec_mode": "cluster",
+        "instances": "0",
+        "args": ["--enable-logs", "-n", "15", "--color"],
+        "log_date_format": "YYYY-MM-DD HH:mm Z",
+        "error_file": "/logs/kw.log",
+        "out_file": "/logs/kw.log",
+        "watch": false,
+        "merge_logs": true,
+        "autorestart": true,
+        "env": {
+            "NODE_ENV": "production",
+            "PORT": "8080"
+        }
+    }]
+}

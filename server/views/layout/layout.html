@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include "layout/meta.html" %}
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/blog-post.css"> {% block css %} {% endblock %}
+    {% include "layout/script.html" %}
+</head>
+
+<body>
+    {% include "layout/header.html" %}
+    <div class="body-container container">
+        {% block content %} {% endblock %}
+
+
+    </div>
+
+
+    {% block js %} {% endblock %} {% include "layout/footer.html" %}
+    <script src="/javascripts/vendor/jquery.min.js"></script>
+    <script src="/javascripts/vendor/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+{% if items and items.length%}
+
+{% for item in items %}
+<div class="col-lg-6  mb-4">
+    <div class="card">
+        <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+        <div class="card-body">
+            <h2 class="card-title" title="{{item.name}}">{{slice(item.name,20)}}</h2>
+            <div>
+                {{slice(strimHtml(item.content),20)|safe}}
+            </div>
+            <a href="/item/{{item._id}}" class="btn btn-primary">Read More →</a>
+        </div>
+        <div class="card-footer text-muted">
+            {{myDate({newDate:item.createTime.slice(0,19).replace('T',' ')}).toString()}} by {{item.author or 'Admin'}}
+            <a href="#">Start Bootstrap</a>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+{% else %}
+<div>没有数据</div>
+{% endif %}
