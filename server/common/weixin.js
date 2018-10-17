@@ -17,8 +17,8 @@ module.exports = {
         }
 
         if (body && body.errcode) {
-            kwsak.console.error(type + body.errmsg, { showTime: true });
-            return callback(body.errmsg, body);
+            kwsak.console.error(type + JSON.stringify(body), { showTime: true });
+            return callback(body);
         }
         kwsak.console.success(body, { showTime: true });
         callback(null, body);
@@ -80,18 +80,23 @@ module.exports = {
         // return res.send(url);
         res.redirect(url);
     },
-    getAccessToken: function (code, callback) {
+    getAccessToken: function (code) {
         var _this = this;
         var url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${__config.appID}&secret=${__config.appsecret}&code=${code}&grant_type=authorization_code`;
-        callback = callback || function () { };
 
-        request.get(url, function (err, response) {
-            if (err) {
-                return callback(err, response);
-            }
-            _this.parseBody(response.body, function (err, body) {
-                callback(err, body);
-            }, 'getAccessToken');
+        return new Promise(function (resolve, reject) {
+            request.get(url, function (err, response) {
+                if (err) {
+                    reject(err);
+                }
+                _this.parseBody(response.body, function (err, body) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(body);
+                    }
+                }, 'getAccessToken');
+            });
         });
 
     },
@@ -108,17 +113,22 @@ module.exports = {
             }, 'getOpenid');
         });
     },
-    getUserinfo: function (access_token, openid, callback) {
+    getUserinfo: function (access_token, openid) {
         var _this = this;
         var url = `https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
-        callback = callback || function () { };
-        request.get(url, function (err, response) {
-            if (err) {
-                return callback(err, response);
-            }
-            _this.parseBody(response.body, function (err, data) {
-                callback(err, data);
-            }, 'getUserinfo');
+
+        return new Promise(function (resolve, reject) {
+            request.get(url, function (err, response) {
+                if (err) {
+                    return reject(err);
+                }
+                _this.parseBody(response.body, function (err, data) {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(data);
+                }, 'getUserinfo');
+            });
         });
     },
     getToken: function (req, callback) {

@@ -21,21 +21,30 @@ router.all('/wx', function (req, res, next) {
   if (req.session.wxData && req.session.wxData.openid) {
     return render();
   }
-  weixin.getAccessToken(code, function (err, data) {
-    if (err) {
-      return next(err);
-    }
-    weixin.getUserinfo(data.access_token, data.openid, function (err, data) {
-      if (err) {
-        return res.redirect('/wx');
-        //return next(err);
-      }
+
+  Promise.resolve()
+    .then(function () {
+      return weixin.getAccessToken(code);
+    })
+    .then(function (data) {
+      return weixin.getUserinfo(data.access_token, data.openid);
+    })
+    .then(function (data) {
       req.session.wxData = data;
       render();
+    })
+    .catch(function (err) {
+      console.log(err);
+      switch (err.errcode) {
+        case 40163:
+          res.redirect('/getUserinfo');
+          break;
+        default:
+          next({ message: errmsg });
+          break;
+      }
+
     });
-  });
-
-
 
 });
 //router.get('*', weixin.wxServerVerify);
