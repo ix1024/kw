@@ -3,9 +3,44 @@ const router = express.Router();
 const Item = require('../../db/table/db_item');
 const site = require('../../config/site');
 const weixin = require('../../common/weixin');
+const kwsak = require('kwsak');
+
+router.all('/wx', function (req, res, next) {
+  var code = req.query.code;
+
+  var render = function () {
+    kwsak.console.success(req.session.wxData);
+    res.renderPage('user/index.html', {
+      wxData: req.session.wxData
+    });
+  };
+
+  if (!code) {
+    return weixin.getCode(req, res, next);
+  }
+  if (req.session.wxData && req.session.wxData.openid) {
+    return render();
+  }
+  weixin.getAccessToken(code, function (err, data) {
+    if (err) {
+      return next(err);
+    }
+    weixin.getUserinfo(data.access_token, data.openid, function (err, data) {
+      if (err) {
+        return res.redirect('/wx');
+        //return next(err);
+      }
+      req.session.wxData = data;
+      render();
+    });
+  });
 
 
-router.get('*', weixin.getToken);
+
+});
+//router.get('*', weixin.wxServerVerify);
+//router.get('*', weixin.getToken);
+router.get('/getUserInfo', weixin.getCode);
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
