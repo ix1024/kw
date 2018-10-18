@@ -1,14 +1,16 @@
 {% extends "layout/layout.html"%}
 
 {% block content %}
-{{wxData.nickname}}
-<img src="{{wxData.headimgurl}}" alt="">
 
-{% if wxData.sex%}
-男
-{% else %}
-女
-{% endif %}
+<div><img src="{{wxData.headimgurl}}" alt=""></div>
+<div class="">{{wxData.nickname}}</div>
+<div>
+    {% if wxData.sex%}
+    男
+    {% else %}
+    女
+    {% endif %}
+</div>
+
 
 {%endblock %}
-

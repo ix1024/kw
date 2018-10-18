@@ -5,6 +5,9 @@ var crypto = require('crypto');
 var token = 'kingwell';
 
 module.exports = {
+    isWeixin: function (req) {
+        return req.headers['user-agent'].toLowerCase().indexOf('wechat') !== -1;
+    },
     parseBody: function (body, callback, type) {
         body = body || '{}';
         type = type + '==>' || '未知';

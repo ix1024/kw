@@ -34,9 +34,12 @@ router.all('/wx', function (req, res, next) {
       render();
     })
     .catch(function (err) {
-      console.log(err);
+
       switch (err.errcode) {
         case 40163:
+          res.redirect('/getUserinfo');
+          break;
+        case 40029:
           res.redirect('/getUserinfo');
           break;
         default:
